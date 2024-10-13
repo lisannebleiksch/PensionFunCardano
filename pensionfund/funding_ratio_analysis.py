@@ -1,0 +1,107 @@
+# # funding_ratio_analysis.py
+# import numpy as np
+
+# class FundingRatioAnalysis:
+#     def __init__(self, current_funding_ratio=0.8, liability_rate=0.015):
+#         """
+#         Initialize the FundingRatioAnalysis object.
+
+#         :param current_funding_ratio: Current funding ratio (Assets / Liabilities).
+#         :param liability_rate: Nominal interest rate (liabilities growth rate).
+#         """
+#         if not (0 < current_funding_ratio < 1):
+#             raise ValueError("Current funding ratio must be between 0 and 1.")
+#         if liability_rate <= 0:
+#             raise ValueError("Liability rate must be a positive number.")
+
+#         self.current_funding_ratio = current_funding_ratio
+#         self.liability_rate = liability_rate
+
+#     def time_to_full_funding(self, additional_rate):
+#         """
+#         Calculate the time to full funding based on additional asset growth rate.
+
+#         :param additional_rate: Additional rate over nominal (x%).
+#         :return: Time to full funding in years. Returns np.inf if funding is unattainable.
+#         """
+#         asset_rate = self.liability_rate + additional_rate
+
+#         # Prevent division by zero or negative rates
+#         if asset_rate <= 0:
+#             return np.inf
+
+#         # Calculate the ratio (1 + r_a) / (1 + r_l)
+#         ratio = (1 + asset_rate) / (1 + self.liability_rate)
+
+#         # If ratio <= 1, full funding is unattainable
+#         if ratio <= 1:
+#             return np.inf
+
+#         # Calculate time using the derived formula
+#         time = np.log(1.25) / np.log(ratio)
+
+#         return time
+
+#     def analyze(self, additional_rates):
+#         """
+#         Analyze the time to full funding over a range of additional rates.
+
+#         :param additional_rates: Iterable of additional rates over nominal (x%).
+#         :return: Dictionary with additional_rates as keys and times to full funding as values.
+#         """
+#         results = {}
+#         for x in additional_rates:
+#             t = self.time_to_full_funding(x)
+#             results[x] = t
+#         return results
+# funding_ratio_analysis.py
+import numpy as np
+
+class FundingRatioAnalysis:
+    def __init__(self, initial_funding_ratio=0.8, nominal_rate=0.015):
+        """
+        Initialize the FundingRatioAnalysis object.
+
+        :param initial_funding_ratio: Current funding ratio (Assets / Liabilities).
+        :param nominal_rate: Nominal interest rate (liabilities growth rate).
+        """
+        if not (0 < initial_funding_ratio < 1):
+            raise ValueError("Initial funding ratio must be between 0 and 1.")
+        if nominal_rate <= 0:
+            raise ValueError("Nominal rate must be a positive number.")
+
+        self.initial_funding_ratio = initial_funding_ratio
+        self.nominal_rate = nominal_rate
+
+    def time_to_full_funding(self, x):
+        """
+        Calculate the time to full funding based on additional asset growth rate.
+
+        :param x: Additional rate over nominal (e.g., 0.005 for 0.5%).
+        :return: Time to full funding in years. Returns np.inf if funding is unattainable.
+        """
+        denominator = 1 + self.nominal_rate + x
+
+        # Prevent division by zero or negative rates
+        if denominator <= 1:
+            return np.inf
+
+        # Calculate time using the simplified formula
+        try:
+            t = np.log(1.0 / self.initial_funding_ratio) / np.log(denominator)
+            return t
+        except:
+            return np.inf
+
+    def analyze(self, x_values):
+        """
+        Analyze the time to full funding over a range of additional rates.
+
+        :param x_values: Iterable of additional rates over nominal (e.g., [0.005, 0.01, ...]).
+        :return: Dictionary with x_values as keys and times to full funding as values.
+        """
+        results = {}
+        for x in x_values:
+            t = self.time_to_full_funding(x)
+            results[x] = t
+        return results
