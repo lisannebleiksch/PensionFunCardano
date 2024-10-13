@@ -12,6 +12,7 @@ from utils.funding_ratio_analysis import FundingRatioAnalysis
 from utils.plotting import Plotting
 
 
+# main function represents the financial analysis workflow
 def main() -> None:
     """
     Main function to execute the financial analysis workflow.
