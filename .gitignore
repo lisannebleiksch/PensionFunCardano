@@ -1,9 +1,9 @@
 *.pyc
 *.csv
 *.log
-*.xlsx
-*.png
+# *.xlsx
+# *.png
 *.jpg
-*.pdf
+# *.pdf
 *.docx
 *.doc
