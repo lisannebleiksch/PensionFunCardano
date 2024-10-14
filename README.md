@@ -6,6 +6,7 @@ This project is an analysis of the pension fund liabilities and bond metrics to 
 ## Index
 
 - [Installation](#installation)
+- [Analysis Information](#analysis-information)
 - [1. Bond Metrics Comparison](#1-bond-metrics-comparison)
 - [2. Hedge Ratios Over Time](#2-hedge-ratios-over-time)
 - [3. Time to Full Funding vs. Additional Asset Growth Rate](#3-time-to-full-funding-vs-additional-asset-growth-rate)
@@ -13,6 +14,8 @@ This project is an analysis of the pension fund liabilities and bond metrics to 
 - [Conclusion](#conclusion)
 
 ## Installation
+This application runs on Python 3.12. Other Python versions might work as well, but in such cases, you will need to update the pyproject.toml file and regenerate the poetry.lock file accordingly.
+
 ### Setting up the Poetry Environment
 
 1. **Install Poetry**:  
@@ -20,37 +23,146 @@ This project is an analysis of the pension fund liabilities and bond metrics to 
    ```
    curl -sSL https://install.python-poetry.org | python3 -
     ```
-2. **Install Dependencies**:
+2.  **Update Python Version in pyproject.toml (if needed):**
+    If you're using a different Python version than 3.12, you'll need to update the pyproject.toml file. Locate the [tool.poetry.dependencies] section and modify the Python version like this:
+    ```
+    python = "^3.x"
+    ```
+    and update the lock file:
+    ```
+    poetry lock --no-update
+    ```
+3. **Install Dependencies**:
     Navigate to the project directory (where pyproject.toml is located) and install the dependencies by running:
     ```
     poetry install
     ```
-3. **Activate the Virtual Environment**:
+4. **Activate the Virtual Environment**:
     You can enter the virtual environment using:
     ```
     poetry shell
     ```
-4. **Download data and save in data folder**:
+5. **Download data and save in data folder**:
     Save the cardano data in the folder with the name data/data_cardano.xlsx
     ```
     cd pensionfund
     mkdir data
     ```
 
-5. **Run the Application**:
+6. **Run the Application**:
     Once inside the virtual environment, you can run the application by executing (on root level):
     ```
     python pensionfund/main.py
+    ```
+    Alternatively, for Python 3.10 or other versions, you can run commands directly using:
+    ```
+    poetry run python pensionfund/main.py
+    ```
+
+7. **Run Tests**:
+    Working progress:
+    ```
+    cd pensionfund
+    python -m unittest discover
     ```
 
 ## Bond information
 
 -   Hedging analysis completed for bond_a with maturity 10 years and coupon 0.012
-    Optimal notional: 6597497.83 for 50.0% hedge ratio
+    Optimal notional: 6605714 for 50.0% hedge ratio
 -   Hedging analysis completed for bond_b with maturity 20 years and coupon 0.015
-   Optimal notional: 3492792.97 for 50.0% hedge ratio
+   Optimal notional: 3497143 for 50.0% hedge ratio
 -   Hedging analysis completed for bond_c with maturity 30 years and coupon 0.02
-    Optimal notional: 2283749.25 for 50.0% hedge ratio
+    Optimal notional: 2286593 for 50.0% hedge ratio
+
+## Analysis Information
+This analysis employs discrete compounding to calculate the Present Value (PV), DV01, and Modified Duration of the pension fund's liabilities and bond cash flows. Given that financial instruments like pension liabilities and bonds have annual cash flows/daily cash flows.
+
+### Key Functions Used:
+
+#### 1. `present_value()`
+Calculates the Present Value (PV) of future cash flows using discrete compounding.
+
+**Formula:**
+$$ PV = \sum_{t=1}^n \frac{CF_t}{(1+r)^t} $$
+
+Where:
+- $ CF_t $ = Cash flow at time $ t $
+- $ r $ = Annual interest rate (as a decimal, e.g., 0.05 for 5%)
+- $ t $ = Time period in years
+- $ n $ = Total number of periods
+
+#### 2. `dv01()`
+Calculates the DV01 (Dollar Value of a Basis Point) using a central difference approximation. DV01 measures the change in present value for a 1 basis point (0.01%) change in the interest rate.
+
+**Formula:**
+$$ DV01 = \frac{PV(r - \Delta r) - PV(r + \Delta r)}{2} $$
+
+Where:
+- $ \Delta r $ = Change in interest rate (1 basis point = 0.0001)
+
+**Explanation:**
+Central Difference Approximation: By evaluating the PV at both $ r - \Delta r $ and $ r + \Delta r $, this method provides a more accurate estimation of the derivative $ \frac{dPV}{dr} $ than using a forward or backward difference.
+
+#### 3. `modified_duration()`
+Calculates the Modified Duration of the liabilities, measuring the sensitivity of the present value to changes in interest rates. This function utilizes the DV01 and the present value (PV) to compute the modified duration.
+
+**Formula:**
+$$ Modified\ Duration = \frac{DV01}{PV \times \Delta r} $$
+
+Where:
+- $ \Delta r $ = Change in interest rate used in DV01 calculation (0.0001)
+
+#### 5. `Hedging Ratio`
+The hedging ratio is calculated using the sensitivity of liabilities to changes in a risk factor, relative to the sensitivity of the assets used to hedge those liabilities:
+$$
+\text{Hedging Ratio} = \frac{\text{Liability DV01}}{\text{Asset DV01}}
+$$
+
+#### 5. `Notinal`
+The notional amount required for the hedge is calculated using the following formula:
+$$
+\text{Notional} = \frac{\text{Hedge Percentage} \times \text{Liability DV01}}{\text{Bond DV01}}
+$$
+
+
+##### 6. `Full funding`
+
+Assumption:
+Liabilities are fixed over time, meaning they do not grow with interest or inflation.
+
+Assets grow at a rate of $(1 + \text{Nominal Rate} + x)$. Liabilities remain constant.
+
+###### Assets Growth:
+$$
+A_t = A_0 \times (1 + \text{Nominal Rate} + x)^t
+$$
+
+###### Liabilities Remain Constant:
+$$
+L_t = L_0
+$$
+
+###### Funding Ratio at Time $t$:
+$$
+\text{Funding Ratio}_t = \frac{A_t}{L_t} = \frac{A_0 \times (1 + \text{Nominal Rate} + x)^t}{L_0}
+$$
+$$
+\text{Funding Ratio}_t = \text{Initial Funding Ratio} \times (1 + \text{Nominal Rate} + x)^t
+$$
+
+###### Solving for $t$ when Funding Ratio is 1 (full funding):
+$$
+1 = \text{Initial Funding Ratio} \times (1 + \text{Nominal Rate} + x)^t
+$$
+$$
+(1 + \text{Nominal Rate} + x)^t = \frac{1}{\text{Initial Funding Ratio}}
+$$
+$$
+t = \frac{\ln\left(\frac{1}{\text{Initial Funding Ratio}}\right)}{\ln(1 + \text{Nominal Rate} + x)}
+$$
+
+
 
 ## 1. Bond Metrics Comparison
 
@@ -59,7 +171,7 @@ This project is an analysis of the pension fund liabilities and bond metrics to 
 ### Explanation:
 This bar chart compares the key metrics for three government bonds (bond_a, bond_b, bond_c):s.
 - **Modified Duration**: Shown in brown, this is a measure of how sensitive the bond price is to changes in interest rates. A higher modified duration means greater sensitivity. 
-- **Modified Duration of Liabilities**: The red dashed line represents the modified duration of the pension fund's liabilities (16.46), which serves as a benchmark for comparing the bond durations.
+- **Modified Duration of Liabilities**: The red dashed line represents the modified duration of the pension fund's liabilities (24.30), which serves as a benchmark for comparing the bond durations.
 
 ### Insights:
 Bond Selection Criteria: Since bond_b's duration closely matches the liabilities' duration, it suggests that bond_b would effectively hedge the interest rate risk, minimizing the mismatch between asset and liability sensitivities.
@@ -97,20 +209,12 @@ This plot shows the relationship between the additional growth rate of the asset
 Impact of Growth Rate: There's a clear inverse relationship between the additional asset growth rate and the time to full funding. Higher growth rates significantly reduce the time required to achieve full funding.
 Strategic Implications: Encouraging higher asset growth rates can expedite the funding process, enhancing the pension fund's financial health and reducing long-term liabilities.
 
-An inverse relationship means that as the additional asset growth rate increases, the time required to achieve full funding decreases. This makes intuitive sense for the following reasons:
-1. Higher Growth Rates Accelerate Asset Accumulation:
-    When assets grow faster, they accumulate more quickly, allowing the fund to reach the necessary level to cover liabilities sooner.
-2. Compound Growth Effect:
-    Higher growth rates benefit from compound interest, where the growth earned each year is reinvested to generate its own growth, exponentially increasing asset value over time.
-3. Reduced Dependency on Time:
-    With higher growth rates, the fund relies less on waiting for assets to grow passively, thus shortening the funding period.
-
 Connection Between Growth Rates and Bond Maturities:
 - Longer-Maturity Bonds (bond_c): More sensitive to interest rate changes due to longer durations. They offer higher yields to compensate for the increased risk.
 - Shorter-Maturity Bonds (bond_a): Less sensitive to interest rate changes, offering lower yields but higher price stability.
 
 Impact on Asset Growth:
-- Longer Maturities: Potentially higher returns if interest rates remain favorable, contributing more significantly to asset growth. However, they carry higher interest rate risk, which must be managed carefully.
+- Longer Maturities: Potentially higher returns if interest rates remain favorable, contributing more significantly to asset growth. However, they carry higher interest rate risk.
 - Shorter Maturities: Provide more predictable returns with lower interest rate risk, but may contribute less to rapid asset growth compared to longer maturities.
 
 
@@ -123,11 +227,7 @@ This bar chart compares the notional values of the bonds (in millions) with the 
 - **Bonds**: Each bond (a, b, c) is shown with its notional value in blue.
 - **PV of Liabilities**: Represented by the red dashed line, the total present value of the pension fund's liabilities is approximately 7.2 million.
 
-### Summary Bond Notional Values:
-- bond_a: 6,597,498
-- bond_b: 3,492,793
-- bond_c: 2,283,749
-- PV of Liabilities: 7,215,075.85
+
 
 
 

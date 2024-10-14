@@ -38,7 +38,7 @@ class FundingRatioAnalysis:
 
     def time_to_full_funding(self, x: float) -> float:
         """
-        Calculates the time required to achieve full funding based on an additional asset growth rate.
+        Calculates the time required to achieve full funding based on an additional asset growth rate. Liability growth is assumed to be constant.
 
         The calculation uses the formula:
             t = ln(1 / initial_funding_ratio) / ln(1 + nominal_rate + x)

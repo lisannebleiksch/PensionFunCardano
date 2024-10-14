@@ -229,7 +229,7 @@ class Plotting:
             x="Bond Name",
             y="Notional Value",
             data=df_notional,
-            label="Bond Notional Value",
+            label="Bond Notional Value (€)",
         )
 
         # Add a horizontal line for the PV of the liability
@@ -254,7 +254,7 @@ class Plotting:
 
         plt.title(title, fontsize=18)
         plt.xlabel(xlabel, fontsize=14)
-        plt.ylabel(ylabel, fontsize=14)
+        plt.ylabel(ylabel+' (€)', fontsize=14)
 
         plt.legend(fontsize=16)
 

@@ -1,5 +1,5 @@
 import numpy as np
-from typing import Iterable
+from typing import Iterable, Optional
 
 
 class Pricer:
@@ -44,11 +44,11 @@ class Pricer:
         self.times: np.ndarray = times_array
         self.interest_rate: float = interest_rate
 
-    def present_value(self) -> float:
+    def present_value(self, interest_rate: Optional[float] = None) -> float:
         """
         Calculates the present value (PV) of the cash flows based on the interest rate.
 
-        The present value is computed using the formula:
+        The present value is computed using the discrete formula:
             PV = Σ (Cash Flow_t) / (1 + r)^t
         where:
             - Cash Flow_t is the cash flow at time t.
@@ -58,34 +58,36 @@ class Pricer:
         Returns:
             float: The present value of the cash flows.
         """
-        discount_factors = (1 + self.interest_rate) ** self.times
-        pv = np.sum(self.cash_flows / discount_factors)
+        if interest_rate is None:
+            interest_rate = (
+                self.interest_rate
+            )  # Use the stored interest rate if not provided
+        discount_factors = 1 / (1 + interest_rate) ** self.times
+        pv = np.sum(self.cash_flows * discount_factors)
         return pv
 
-    def dv01(self, delta_r: float = 0.0001) -> float:
+    def dv01(
+        self, interest_rate: Optional[float] = None, delta_r: float = 0.0001
+    ) -> float:
         """
         Calculates the DV01 (Dollar Value of 01) of the cash flows.
 
         DV01 measures the change in present value for a 1 basis point (0.01%) change in interest rate.
-        It is calculated as the difference in present value when the interest rate is increased by `delta_r`.
+        It is calculated by using the central difference `delta_r`.
 
         Args:
             delta_r (float, optional): The small change in interest rate (default is 0.0001, representing 1 basis point).
 
         Returns:
             float: The DV01 of the cash flows.
-
-        Raises:
-            ValueError: If `delta_r` is not positive.
         """
-        if delta_r <= 0:
-            raise ValueError("Delta_r must be a positive number.")
-
-        pv_current = self.present_value()
-        pv_new = np.sum(
-            self.cash_flows / (1 + self.interest_rate + delta_r) ** self.times
-        )
-        dv01 = pv_current - pv_new
+        if interest_rate is None:
+            interest_rate = (
+                self.interest_rate
+            )  # Use the stored interest rate if not provided
+        pv_up = self.present_value(interest_rate=interest_rate + delta_r)
+        pv_down = self.present_value(interest_rate=interest_rate - delta_r)
+        dv01 = (pv_down - pv_up) / 2
         return dv01
 
     def modified_duration(self, delta_r: float = 0.0001) -> float:
