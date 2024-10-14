@@ -119,7 +119,7 @@ $$
 \text{Hedging Ratio} = \frac{\text{Liability DV01}}{\text{Asset DV01}}
 $$
 
-#### 5. `Notinal`
+#### 5. `Notional`
 The notional amount required for the hedge is calculated using the following formula:
 $$
 \text{Notional} = \frac{\text{Hedge Percentage} \times \text{Liability DV01}}{\text{Bond DV01}}
@@ -230,5 +230,8 @@ This bar chart compares the notional values of the bonds (in millions) with the 
 
 
 
+## Conclusion
 
+In this analysis, an evaluation was conducted to hedge the interest rate risk associated with the pension fund liabilities of PFFG. Through a comparison of bond metrics, `bond_b` was identified as the optimal choice, given its modified duration closely aligns with that of the liabilities and it maintains a stable hedge ratio over time. The notional amount required to hedge 50% of the interest rate risk demonstrated how this hedge would perform over the next six months given changing interest rates. It gives a measure of desired time to rehedge.
 
+Furthermore, the funding ratio analysis highlighted the significant impact of additional asset growth on reducing the time to achieve full funding. It was found that even a modest increase in asset growth rates can decrease the time needed for the pension fund to reach full funding status.
