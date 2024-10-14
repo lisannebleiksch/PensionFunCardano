@@ -166,7 +166,7 @@ class Plotting:
         # Melt the DataFrame for easier plotting with seaborn
         df_melted = df.melt(
             id_vars=["Bond Name"],
-            value_vars=["Price", "Modified Duration"],
+            value_vars=["Modified Duration"],
             var_name="Metric",
             value_name="Value",
         )
