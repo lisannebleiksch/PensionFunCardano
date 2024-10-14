@@ -105,7 +105,7 @@ DV01 = \frac{PV(r - \Delta r) - PV(r + \Delta r)}{2}
 $$
 
 Where:
-- $( \Delta r) $ = Change in interest rate (1 basis point = 0.0001)
+- $( \Delta r )$ = Change in interest rate used in DV01 calculation (0.0001)
 
 **Explanation:**
 Central Difference Approximation: By evaluating the PV at both $( r - \Delta r )$ and $( r + \Delta r )$.
@@ -119,8 +119,6 @@ $$
 Modified\ Duration = \frac{DV01}{PV \times \Delta r} 
 $$
 
-Where:
-- $( \Delta r )$ = Change in interest rate used in DV01 calculation (0.0001)
 
 #### 5. `Hedging Ratio`
 The hedging ratio is calculated using the sensitivity of liabilities to changes in a risk factor, relative to the sensitivity of the assets used to hedge those liabilities:
