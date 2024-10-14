@@ -87,7 +87,7 @@ Calculates the Present Value (PV) of future cash flows using discrete compoundin
 $$ PV = \sum_{t=1}^n \frac{CF_t}{(1+r)^t} $$
 
 Where:
-- $ CF_t $ = Cash flow at time $ t $
+- $(CF_t)$ = Cash flow at time $ t $
 - $ r $ = Annual interest rate (as a decimal, e.g., 0.05 for 5%)
 - $ t $ = Time period in years
 - $ n $ = Total number of periods
@@ -108,10 +108,12 @@ Central Difference Approximation: By evaluating the PV at both $ r - \Delta r $ 
 Calculates the Modified Duration of the liabilities, measuring the sensitivity of the present value to changes in interest rates. This function utilizes the DV01 and the present value (PV) to compute the modified duration.
 
 **Formula:**
-$$ Modified\ Duration = \frac{DV01}{PV \times \Delta r} $$
+$$ 
+Modified\ Duration = \frac{DV01}{PV \times \Delta r} 
+$$
 
 Where:
-- $ \Delta r $ = Change in interest rate used in DV01 calculation (0.0001)
+- $( \Delta r )$ = Change in interest rate used in DV01 calculation (0.0001)
 
 #### 5. `Hedging Ratio`
 The hedging ratio is calculated using the sensitivity of liabilities to changes in a risk factor, relative to the sensitivity of the assets used to hedge those liabilities:
