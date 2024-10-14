@@ -223,15 +223,14 @@ Impact on Asset Growth:
 ![Notional vs. Liability](pensionfund/plots/notional_vs_liability.png)
 
 ### Explanation:
-This bar chart compares the notional values of the bonds (in millions) with the present value (PV) of the pension fund's liabilities.
+This bar chart compares the notional values of the bonds (in millions) with the present value (PV) of the pension fund's liabilities. The notional value is the face value or principal amount of the bond you need to purchase to achieve the desired level of hedging (e.g., 50% of the interest rate risk).
 - **Bonds**: Each bond (a, b, c) is shown with its notional value in blue.
 - **PV of Liabilities**: Represented by the red dashed line, the total present value of the pension fund's liabilities is approximately 7.2 million.
 
 
 
-
 ## Conclusion
 
-In this analysis, an evaluation was conducted to hedge the interest rate risk associated with the pension fund liabilities of PFFG. Through a comparison of bond metrics, `bond_b` was identified as the optimal choice, given its modified duration closely aligns with that of the liabilities and it maintains a stable hedge ratio over time. The notional amount required to hedge 50% of the interest rate risk demonstrated how this hedge would perform over the next six months given changing interest rates. It gives a measure of desired time to rehedge.
+In this analysis, an evaluation was conducted to hedge the interest rate risk associated with the pension fund liabilities of PFFG. Through a comparison of bond metrics, `bond_b` was identified as the optimal choice, given its modified duration closely aligns with that of the liabilities and it maintains a stable hedge ratio over time. The notional amount required to hedge 50% of the interest rate risk demonstrated how this hedge would perform over the next six months given changing interest rates. It gives a measure of desired time to rehedge. 
 
 Furthermore, the funding ratio analysis highlighted the significant impact of additional asset growth on reducing the time to achieve full funding. It was found that even a modest increase in asset growth rates can decrease the time needed for the pension fund to reach full funding status.
