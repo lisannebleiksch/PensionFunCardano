@@ -240,6 +240,7 @@ This bar chart compares the notional values of the bonds (in millions) with the 
 
 ## Conclusion
 
-In this analysis, an evaluation was conducted to hedge the interest rate risk associated with the pension fund liabilities of PFFG. Through a comparison of bond metrics, `bond_b` was identified as the optimal choice, given its modified duration closely aligns with that of the liabilities and it maintains a stable hedge ratio over time. The Hedge ratio over times indicate how well the bonds are performing over time. Even when initial metrics like modified duration match, changes over time and market conditions can significantly impact hedge effectiveness.  It gives a measure of desired time to rehedge in this case (~100 days). 
+In this analysis, an evaluation was conducted to hedge the interest rate risk associated with the pension fund liabilities of PFFG. Through a comparison of bond metrics, `bond_b` was identified as the optimal choice, given its modified duration closely aligns with that of the liabilities and it maintains a stable hedge ratio over time. 
+The hedge ratio's temporal analysis demonstrates the bonds' performance stability. Despite initial matches in metrics like modified duration, ongoing changes in market conditions can significantly influence hedge effectiveness, necessitating rehedging approximately every 100 days in this case.
 
 Furthermore, the funding ratio analysis highlighted the significant impact of additional asset growth on reducing the time to achieve full funding. It was found that even a modest increase in asset growth rates can decrease the time needed for the pension fund to reach full funding status.
