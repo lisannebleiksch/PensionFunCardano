@@ -108,7 +108,7 @@ Where:
 - $( \Delta r) $ = Change in interest rate (1 basis point = 0.0001)
 
 **Explanation:**
-Central Difference Approximation: By evaluating the PV at both $( r - \Delta r $ and $ r + \Delta r )$, this method provides a more accurate estimation of the derivative $( \frac{dPV}{dr} )$ than using a forward or backward difference.
+Central Difference Approximation: By evaluating the PV at both $( r - \Delta r )$ and $( r + \Delta r )$, this method provides a more accurate estimation of the derivative $( \frac{dPV}{dr} )$ than using a forward or backward difference.
 
 #### 3. `modified_duration()`
 Calculates the Modified Duration of the liabilities, measuring the sensitivity of the present value to changes in interest rates. This function utilizes the DV01 and the present value (PV) to compute the modified duration.
