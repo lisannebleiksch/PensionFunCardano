@@ -84,25 +84,31 @@ This analysis employs discrete compounding to calculate the Present Value (PV), 
 Calculates the Present Value (PV) of future cash flows using discrete compounding.
 
 **Formula:**
-$$ PV = \sum_{t=1}^n \frac{CF_t}{(1+r)^t} $$
+
+$$ 
+PV = \sum_{t=1}^n \frac{CF_t}{(1+r)^t} 
+$$
 
 Where:
-- $(CF_t)$ = Cash flow at time $ t $
-- $ r $ = Annual interest rate (as a decimal, e.g., 0.05 for 5%)
-- $ t $ = Time period in years
-- $ n $ = Total number of periods
+- $(CF_t)$ = Cash flow at time t
+- r = Annual interest rate (as a decimal, e.g., 0.05 for 5%)
+- t = Time period in years
+- n = Total number of periods
 
 #### 2. `dv01()`
 Calculates the DV01 (Dollar Value of a Basis Point) using a central difference approximation. DV01 measures the change in present value for a 1 basis point (0.01%) change in the interest rate.
 
 **Formula:**
-$$ DV01 = \frac{PV(r - \Delta r) - PV(r + \Delta r)}{2} $$
+
+$$ 
+DV01 = \frac{PV(r - \Delta r) - PV(r + \Delta r)}{2} 
+$$
 
 Where:
-- $ \Delta r $ = Change in interest rate (1 basis point = 0.0001)
+- $( \Delta r) $ = Change in interest rate (1 basis point = 0.0001)
 
 **Explanation:**
-Central Difference Approximation: By evaluating the PV at both $ r - \Delta r $ and $ r + \Delta r $, this method provides a more accurate estimation of the derivative $ \frac{dPV}{dr} $ than using a forward or backward difference.
+Central Difference Approximation: By evaluating the PV at both $( r - \Delta r $ and $ r + \Delta r )$, this method provides a more accurate estimation of the derivative $( \frac{dPV}{dr} )$ than using a forward or backward difference.
 
 #### 3. `modified_duration()`
 Calculates the Modified Duration of the liabilities, measuring the sensitivity of the present value to changes in interest rates. This function utilizes the DV01 and the present value (PV) to compute the modified duration.
@@ -118,12 +124,14 @@ Where:
 
 #### 5. `Hedging Ratio`
 The hedging ratio is calculated using the sensitivity of liabilities to changes in a risk factor, relative to the sensitivity of the assets used to hedge those liabilities:
+
 $$
 \text{Hedging Ratio} = \frac{\text{Liability DV01}}{\text{Asset DV01}}
 $$
 
 #### 5. `Notional`
 The notional amount required for the hedge is calculated using the following formula:
+
 $$
 \text{Notional} = \frac{\text{Hedge Percentage} \times \text{Liability DV01}}{\text{Bond DV01}}
 $$
