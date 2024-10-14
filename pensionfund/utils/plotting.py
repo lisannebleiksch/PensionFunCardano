@@ -60,6 +60,14 @@ class Plotting:
         plt.figure(figsize=(12, 6))
         for column in df.columns:
             plt.plot(df.index, df[column], label=column, linewidth=3)
+        plt.hlines(
+            0.5,
+            df.index.min(),
+            df.index.max(),
+            colors="r",
+            linestyles="--",
+            label="Hedge Ratio = 0.5",
+        )
         plt.title(title, fontsize=18)
         plt.xlabel(xlabel, fontsize=14)
         plt.ylabel(ylabel, fontsize=14)
