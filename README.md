@@ -108,6 +108,7 @@ Central Difference Approximation: By evaluating the PV at both $ r - \Delta r $ 
 Calculates the Modified Duration of the liabilities, measuring the sensitivity of the present value to changes in interest rates. This function utilizes the DV01 and the present value (PV) to compute the modified duration.
 
 **Formula:**
+
 $$ 
 Modified\ Duration = \frac{DV01}{PV \times \Delta r} 
 $$
